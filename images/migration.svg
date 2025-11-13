@@ -1,0 +1,15 @@
+<svg width="120" height="60" viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- 3X-UI Logo -->
+  <text x="10" y="35" font-size="24" font-weight="bold" fill="#00d4ff" font-family="Arial">3X</text>
+  
+  <!-- Arrow -->
+  <path d="M 50 30 L 70 30" stroke="#00d4ff" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#00d4ff"/>
+    </marker>
+  </defs>
+  
+  <!-- PasarGuard Logo -->
+  <text x="75" y="35" font-size="20" font-weight="bold" fill="#1abc9c" font-family="Arial">PG</text>
+</svg>
