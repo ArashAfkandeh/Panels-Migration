@@ -117,11 +117,13 @@ fi
 rm -rf "${TEMP_DIR}"
 rm -f "/root/Panels_Migration.tar.gz"
 
-# Run the application
+# Display installation summary
 echo ""
 echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}Starting Panels Migration...${NC}"
+echo -e "${GREEN}Installation completed successfully!${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
-
-"${INSTALL_DIR}"
+echo -e "${YELLOW}Installation directory:${NC} ${INSTALL_DIR}"
+echo -e "${YELLOW}To run the application:${NC}"
+echo -e "  ${GREEN}${INSTALL_DIR}${NC}"
+echo ""
