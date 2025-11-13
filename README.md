@@ -133,7 +133,7 @@ curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Panels-Migration/main/
 
 ## 💖 حمایت مالی
 
-<div align="left">
+<div align="center">
 
 برای پشتیبانی از پروژه ما، TRX (شبکه TRC-20) واریز کنید:
 
