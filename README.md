@@ -4,7 +4,7 @@
 
 ![Migration](./images/migration.svg)
 
-# مدیر کاربران و Inbound پانل‌ها
+# مدیر کاربران و Inbound پنل‌ها
 
 [🇬🇧 English](./README_EN.md) | [🇮🇷 فارسی](./README.md)
 
