@@ -52,7 +52,7 @@ go build -o Panels_Migration ./cmd/main
 ### Install
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Panels-Migration/main/install.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/ArashAfkandeh/Panels-Migration/main/install.sh | sudo bash && /root/Panels_Migration
 ```
 
 ### Main Steps
