@@ -1,15 +1,13 @@
 <div align="center">
 
-# 🚀 Migration from the 3X-UI Panel to PasarGuard
-
 ![Migration](./images/migration.svg)
 
-# User and Inbound Panel Manager
+# 🚀 Migration from the 3X-UI Panel to PasarGuard
 
 [🇬🇧 English](./README_EN.md) | [🇮🇷 فارسی](./README.md)
 
 <p>
-A powerful and comprehensive tool for migrating users between 3X-UI and PasarGuard panels
+A powerful and comprehensive tool for transferring users between 3X-UI and PasarGuard panels
 </p>
 
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
