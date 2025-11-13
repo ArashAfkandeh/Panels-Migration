@@ -3,8 +3,6 @@
 # Panels Migration Installation Script
 # This script downloads and extracts the Panels Migration tool
 
-set -e
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -18,7 +16,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Download URL
-DOWNLOAD_URL="https://github.com/ArashAfkandeh/Panels-Migration/releases/download/Panels_Migration/Panels_Migration_v0.0.1.tar.gz"
+DOWNLOAD_URL="https://github.com/ArashAfkandeh/Panels-Migration/releases/download/PasarGuard/Panels_Migration_v0.0.1.tar.gz"
 
 # Installation directory
 INSTALL_DIR="/root/Panels_Migration"
