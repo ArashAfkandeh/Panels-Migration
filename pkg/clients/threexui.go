@@ -357,9 +357,77 @@ func (c *ThreeXUIClient) ExtractClientsFromInbounds(inbounds []models.Inbound) (
 			continue
 		}
 		if err := json.Unmarshal([]byte(inbound.Settings), &settings); err != nil {
-			fmt.Printf("→ Processing inbound: %s (%s:%d) - Could not parse clients (likely not a client-based protocol like WireGuard). This is OK.\n", inbound.Remark, inbound.Protocol, inbound.Port)
-			allInboundData = append(allInboundData, inboundData)
-			continue
+			// Try a tolerant parsing: the settings JSON may use different key names or types.
+			var generic map[string]interface{}
+			if err2 := json.Unmarshal([]byte(inbound.Settings), &generic); err2 == nil {
+				// Attempt to find a clients-like array in the generic map
+				var clientsArr []interface{}
+				if v, ok := generic["clients"]; ok {
+					if arr, ok2 := v.([]interface{}); ok2 {
+						clientsArr = arr
+					}
+				} else if v, ok := generic["users"]; ok {
+					if arr, ok2 := v.([]interface{}); ok2 {
+						clientsArr = arr
+					}
+				}
+
+				if len(clientsArr) == 0 {
+					fmt.Printf("→ Processing inbound: %s (%s:%d) - Could not parse clients (likely not a client-based protocol like WireGuard). This is OK.\n", inbound.Remark, inbound.Protocol, inbound.Port)
+					allInboundData = append(allInboundData, inboundData)
+					continue
+				}
+
+				// Map generic client objects into models.ClientSetting
+				for _, ci := range clientsArr {
+					if cm, ok := ci.(map[string]interface{}); ok {
+						cs := models.ClientSetting{}
+						// id may be string or number
+						if idv, ok := cm["id"]; ok {
+							switch t := idv.(type) {
+							case string:
+								cs.ID = t
+							case float64:
+								cs.ID = fmt.Sprintf("%d", int64(t))
+							}
+						}
+						if ev, ok := cm["email"]; ok {
+							if s, ok2 := ev.(string); ok2 {
+								cs.Email = s
+							}
+						} else if ev, ok := cm["user"]; ok {
+							if s, ok2 := ev.(string); ok2 {
+								cs.Email = s
+							}
+						}
+						if en, ok := cm["enable"]; ok {
+							if b, ok2 := en.(bool); ok2 {
+								cs.Enable = b
+							}
+						}
+						// totalGB may be named data_limit or totalGB and may be number
+						if tg, ok := cm["totalGB"]; ok {
+							if n, ok2 := tg.(float64); ok2 {
+								cs.TotalGB = int64(n)
+							}
+						} else if tg, ok := cm["data_limit"]; ok {
+							if n, ok2 := tg.(float64); ok2 {
+								cs.TotalGB = int64(n)
+							}
+						}
+						if ex, ok := cm["expiryTime"]; ok {
+							if n, ok2 := ex.(float64); ok2 {
+								cs.ExpiryTime = int64(n)
+							}
+						}
+						settings.Clients = append(settings.Clients, cs)
+					}
+				}
+			} else {
+				fmt.Printf("→ Processing inbound: %s (%s:%d) - Could not parse clients (likely not a client-based protocol like WireGuard). This is OK.\n", inbound.Remark, inbound.Protocol, inbound.Port)
+				allInboundData = append(allInboundData, inboundData)
+				continue
+			}
 		}
 		fmt.Printf("\n→ Processing inbound: %s (%s:%d)\n", inbound.Remark, inbound.Protocol, inbound.Port)
 		fmt.Printf(" Number of clients: %d\n", len(settings.Clients))
