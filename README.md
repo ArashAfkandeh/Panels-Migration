@@ -42,7 +42,7 @@
 ### کامپایل کردن
 
 ```bash
-cd /root/Panels_Migration
+cd /root/Panels-Migration-main
 go build -o Panels_Migration ./cmd/main
 ./Panels_Migration
 ```
