@@ -15,8 +15,27 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-# Download URL
-DOWNLOAD_URL="https://github.com/ArashAfkandeh/Panels-Migration/releases/download/PasarGuard/Panels_Migration_v0.0.1.tar.gz"
+# Determine download URL (resolve latest release from GitHub)
+REPO_OWNER="ArashAfkandeh"
+REPO_NAME="Panels-Migration"
+ASSET_PATTERN="Panels_Migration.*\\.tar\\.gz"
+
+echo -e "${YELLOW}Resolving latest release download URL from GitHub...${NC}"
+API_URL="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest"
+# Prefer jq if available for robust JSON parsing
+if command -v jq &> /dev/null; then
+    DOWNLOAD_URL=$(curl -s "$API_URL" | jq -r --arg pattern "$ASSET_PATTERN" '.assets[] | select(.name | test($pattern)) | .browser_download_url' | head -n1)
+else
+    # Fallback to simple grep/sed parsing if jq not installed
+    DOWNLOAD_URL=$(curl -s "$API_URL" | grep '"browser_download_url"' | grep 'Panels_Migration' | sed -E 's/.*"([^"]+)".*/\1/' | head -n1)
+fi
+
+if [ -z "${DOWNLOAD_URL}" ]; then
+    echo -e "${YELLOW}Warning: Could not determine latest release automatically. Falling back to default URL.${NC}"
+    DOWNLOAD_URL="https://github.com/ArashAfkandeh/Panels-Migration/releases/download/PasarGuard/Panels_Migration_v0.0.1.tar.gz"
+fi
+
+echo -e "${GREEN}Download URL: ${DOWNLOAD_URL}${NC}"
 
 # Installation directory
 INSTALL_DIR="/root/Panels_Migration"
@@ -41,7 +60,7 @@ echo ""
 
 # Install prerequisites
 echo -e "${YELLOW}Installing prerequisites...${NC}"
-PACKAGES="curl wget tar gzip"
+PACKAGES="curl wget tar gzip jq"
 
 for package in $PACKAGES; do
     if ! command -v $package &> /dev/null; then
